@@ -1,5 +1,6 @@
 from random import *
 from datetime import *
+from time import *
 
 
 class Passport:
@@ -10,7 +11,7 @@ class Passport:
         self.patronymic = patronymic
         self.gender = gender.upper()
         self.city = city
-        self.birth_date = birth_date
+        self.birth_date = strptime(birth_date, '%d.%m.%Y')
 
         self.authority = randint(1111, 9999)
         self.__number = randint(10000000, 999999999)
@@ -26,10 +27,14 @@ class Passport:
             \tPatronymic: {self.patronymic}\n\
             \tGender: {self.gender}\n\
             \tCity: {self.city}\n\
-            \tBirth date: {self.birth_date}\n\
+            \tBirth date: {self.birth_date[2]}-{self.birth_date[1]}-{self.birth_date[0]}\n\
             \tAuthority: {self.authority}\n\
             \tSerial number: {self.__number}\n\
             \tDate: {self.create_date}')
+
+    def _printBirthdate(self):
+        print(f'\tBirth date: {self.birth_date[2]}-{self.birth_date[1]}-{self.birth_date[0]}\n\
+            ')
 
 
 class ForeignPassport(Passport):
@@ -41,6 +46,7 @@ class ForeignPassport(Passport):
         self.visa = []
 
     def set_visa(self, country, end_time):
+        end_time = strptime(end_time, '%d.%m.%Y')
         self.visa.append({country: end_time})
 
     def _print(self):
@@ -50,11 +56,30 @@ class ForeignPassport(Passport):
             \tPatronymic: {self.patronymic}\n\
             \tGender: {self.gender}\n\
             \tCity: {self.city}\n\
-            \tBirth date: {self.birth_date}\n\
+            \tBirth date: {self.birth_date[2]}-{self.birth_date[1]}-{self.birth_date[0]}\n\
             \tSerial number: {self.__number}')
         print('Visa info:')
         for item in self.visa:
-            print('\t', list(item.keys())[0], ':', list(item.values())[0])
+            print('\t', list(item.keys())[
+                0], ':', f'{list(item.values())[0][2]}-{list(item.values())[0][1]}-{list(item.values())[0][0]}')
+
+    def countryVisaInfo(self):
+        print('Visited Country Info:')
+        for item in self.visa:
+            print('\t', list(item.keys())[0])
+
+    def timeVisa(self):
+        print('Acting Visas info:')
+        today = strptime(datetime.today().strftime('%d-%m-%Y'), '%d-%m-%Y')
+        for item in self.visa:
+            if list(item.values())[0][0] >= today[0]:
+                if list(item.values())[0][1] > today[1]:
+                    print('\t', list(item.keys())[
+                        0], ':', f'{list(item.values())[0][2]}-{list(item.values())[0][1]}-{list(item.values())[0][0]}')
+                elif list(item.values())[0][1] == today[1]:
+                    if list(item.values())[0][2] > today[2]:
+                        print('\t', list(item.keys())[
+                            0], ':', f'{list(item.values())[0][2]}-{list(item.values())[0][1]}-{list(item.values())[0][0]}')
 
 
 Bob = Passport('Bob', 'Bobich', 'Bobovich', 'm', 'London', '25.06.2016')
@@ -73,17 +98,3 @@ Bill._print()
 # Методи:
 #  Вивести всі відвідані країни
 #  Відобразити інформацію про незакінчені візи
-
-
-# class Add:
-
-#     def __init__(self, number) -> None:
-#         self.number = number
-
-#     def __add__(self, b):
-#         self.number = self.number * b
-
-
-# a = Add(5)
-# a.__add__(5)
-# print(a.number)
