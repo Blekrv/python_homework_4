@@ -33,6 +33,9 @@ class Passport:
             \tDate: {self.create_date}')
 
     def _printBirthdate(self):
+        """
+        Метод для виводу дати народження у форматі (25-09-2016)
+        """
         print(f'\tBirth date: {self.birth_date[2]}-{self.birth_date[1]}-{self.birth_date[0]}\n\
             ')
 
@@ -64,11 +67,17 @@ class ForeignPassport(Passport):
                 0], ':', f'{list(item.values())[0][2]}-{list(item.values())[0][1]}-{list(item.values())[0][0]}')
 
     def countryVisaInfo(self):
+        """
+        Метод для виводу країн які були відвідані
+        """
         print('Visited Country Info:')
         for item in self.visa:
             print('\t', list(item.keys())[0])
 
     def timeVisa(self):
+        """
+        Метод для виводу незакінчених віз
+        """
         print('Acting Visas info:')
         today = strptime(datetime.today().strftime('%d-%m-%Y'), '%d-%m-%Y')
         for item in self.visa:
@@ -85,12 +94,19 @@ class ForeignPassport(Passport):
 Bob = Passport('Bob', 'Bobich', 'Bobovich', 'm', 'London', '25.06.2016')
 print(Bob)
 Bob._print()
+# Bob._printBirthdate()
+
 
 Bill = ForeignPassport('Bill', 'Bobich', 'Bobovich',
                        'm', 'London', '25.06.2016')
 Bill.set_visa('Poland', '01.09.2021')
-Bill._print()
-# print(Bob.authority, Bob.number)
+Bill.set_visa('USA', '26.05.2021')
+Bill.set_visa('France', '21.06.2021')
+Bill.set_visa('Austria', '23.06.2021')
+# Bill._print()
+# Bill.countryVisaInfo()
+# Bill.timeVisa()
+
 # Робота з датою (25/12/2000)
 # Метод виведення дати народження у текстовому форматі(25-12-2000)
 
